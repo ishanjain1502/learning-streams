@@ -1,25 +1,12 @@
 import * as fs from 'fs';
+import csv from 'csvtojson'
 
 const main = async() => {
-    const readStream = fs.createReadStream("./data/import.csv" , {
-        highWaterMark: 100
-    });
+    const readStream = fs.createReadStream("./data/import.csv"  );
 
     const writeStream = fs.createWriteStream("./data/export.csv")
 
-    readStream.on('data' , (buffer) => {
-        console.log(">>>DATA:");
-        console.log(buffer.toString());
-
-        writeStream.write(buffer);
-
-    })
-
-    readStream.on('end' , ()=> {
-        console.log('stream ended');
-
-        writeStream.end()
-    })
+    readStream.pipe(writeStream)
 }
 
 main();
